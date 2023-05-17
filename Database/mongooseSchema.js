@@ -30,11 +30,28 @@ const productSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+const register = mongoose.Schema({
+  name: { type: String },
+  email: { type: String },
+  password: { type: String },
+});
+
+
+
+const order = mongoose.Schema({
+  author : {type:mongoose.Schema.Types.ObjectId ,ref:"userData"},
+  qty: { type: Number },
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+  },
+
+});
+
 
 // PRODUCT SCHEMA
 
-
 const Product = mongoose.model("Product", productSchema);
-
-
-module.exports = { Product };
+const Order = mongoose.model("Order", order);
+const userData = mongoose.model("userData", register);
+module.exports = { Product, userData,Order };
