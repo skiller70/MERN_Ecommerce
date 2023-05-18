@@ -1,7 +1,8 @@
 const mongoModel = require("../Database/mongooseSchema");
-const { v2: cloudinary } = require('cloudinary');
+const { v2: cloudinary } = require("cloudinary");
 module.exports = async (req, res) => {
-    console.log(req.body)
+  
+
   try {
     if (req.body) {
       // Create a new product
