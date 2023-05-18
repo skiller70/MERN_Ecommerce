@@ -4,48 +4,43 @@ const stripe = require("stripe")(
 );
 const uuid = require("uuid").v4;
 module.exports = async (req, res) => {
-
   const { auth, cartItem, token, totalAmount } = req.body;
- console.log(auth)
-try {
-  const customer = await stripe.customers.create({
-    email: token.email,
-    source: token.id,
-  });
-  const key = uuid();
-
-  const charge = await stripe.charges.create({
-    amount: totalAmount * 100,
-    currency: "inr",
-    customer: customer.id,
-    description: "Example charge",
-    // shipping: {
-    //   name: token.card.name,
-    //   address: {
-    //     city: token.address_city,
-    //     country: token.address_country,
-    //     line1: token.address_line1,
-    //     line2: token.address_line2,
-    //     postal_code: token.address_zip,
-    //   },
-    // },
-  });
-
-   cartItem.map(async (item) => {
-    const order = await new mongoModel.Order({
-      qty: item.Qty,
-      author: auth,
-      product: item._id,
+  console.log(auth);
+  try {
+    const customer = await stripe.customers.create({
+      email: token.email,
+      source: token.id,
     });
-    const ggwp = await order.save();
-  });
+    const key = uuid();
 
+    const charge = await stripe.charges.create({
+      amount: totalAmount * 100,
+      currency: "inr",
+      customer: customer.id,
+      description: "Example charge",
+      // shipping: {
+      //   name: token.card.name,
+      //   address: {
+      //     city: token.address_city,
+      //     country: token.address_country,
+      //     line1: token.address_line1,
+      //     line2: token.address_line2,
+      //     postal_code: token.address_zip,
+      //   },
+      // },
+    });
 
-  res.status(200).send(key)
-  
-} catch (error) {
-  res.status(500).send("payment failed")
-}
+    cartItem.map(async (item) => {
+      const order = await new mongoModel.Order({
+        qty: item.Qty,
+        author: auth,
+        product: item._id,
+      });
+      const ggwp = await order.save();
+    });
 
- 
+    res.status(200).send(key);
+  } catch (error) {
+    res.status(500).send("payment failed");
+  }
 };
